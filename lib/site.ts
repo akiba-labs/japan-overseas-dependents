@@ -16,6 +16,7 @@ export const SIBLING_TOOLS = [
   { href: "https://japan-mynumber-card-check.vercel.app", label: "Japan My Number Card Check" },
   { href: "https://japan-hsp-points.vercel.app", label: "Japan HSP Points Calculator" },
   { href: "https://japan-pet-quarantine.vercel.app", label: "Japan Pet Quarantine Check" },
+  { href: "https://japan-leaving-tax.vercel.app", label: "Japan Leaving Tax Check" },
   { href: "https://japan-visa-fee.vercel.app", label: "Japan Visa Fee Calculator" },
   { href: "https://japan-pr-check.vercel.app", label: "Japan PR Guideline Check" },
   { href: "https://japan-intl-postage.vercel.app", label: "Japan International Postage 2027" },
