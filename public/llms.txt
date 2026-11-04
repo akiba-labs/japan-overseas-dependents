@@ -55,6 +55,7 @@ Educational estimate, not tax advice, not affiliated with the NTA. Income tax on
 - Japan Pet Quarantine Check: https://japan-pet-quarantine.vercel.app
 - Japan Leaving Tax Check: https://japan-leaving-tax.vercel.app
 - Japan Disaster Prep Check: https://japan-disaster-prep.vercel.app
+- Japan Lost Item Check: https://japan-lost-item.vercel.app
 - Japan Visa Fee Calculator: https://japan-visa-fee.vercel.app
 - Japan PR Guideline Check: https://japan-pr-check.vercel.app
 - Japan International Postage 2027: https://japan-intl-postage.vercel.app
