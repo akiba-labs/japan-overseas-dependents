@@ -58,6 +58,7 @@ Educational estimate, not tax advice, not affiliated with the NTA. Income tax on
 - Japan Lost Item Check: https://japan-lost-item.vercel.app
 - Japan High-Cost Medical Expense Check: https://japan-medical-cost-cap.vercel.app
 - Japan Job Loss Check: https://japan-job-loss.vercel.app
+- Japan Visa Renewal Window Check: https://japan-visa-renewal.vercel.app
 - Japan Visa Fee Calculator: https://japan-visa-fee.vercel.app
 - Japan PR Guideline Check: https://japan-pr-check.vercel.app
 - Japan International Postage 2027: https://japan-intl-postage.vercel.app
