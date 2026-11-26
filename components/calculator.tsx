@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CardDisclaimer } from "@/components/card-disclaimer";
 import { ShareBar } from "@/components/share-bar";
 import { DISABILITY, MARGINAL_RATES, METHODS, METHOD_LABEL, RELATIONSHIPS, RELATIONSHIP_LABEL, type Disability, type Method, type Relationship } from "@/lib/dependents";
+import { isGithubPages, pagesSiteUrl } from "@/lib/hosting";
 import { EXAMPLE_SHARED, PUBLIC_URL, resultPath, safeCheck, type Shared } from "@/lib/share";
 
 const field = "mt-2 w-full rounded-xl border border-line bg-black/40 px-3 py-2 text-sm text-foreground focus:border-amber";
@@ -62,7 +63,7 @@ export function Calculator({ initial }: { initial?: Shared }) {
     marginalRate: rate ? Number(rate) : null,
   };
   const r = ageNum !== null ? safeCheck(shared) : null;
-  const shareUrl = `${PUBLIC_URL}${resultPath(shared)}`;
+  const shareUrl = isGithubPages ? `${pagesSiteUrl(PUBLIC_URL)}/` : `${PUBLIC_URL}${resultPath(shared)}`;
   const show30 = !isSpouse && ageNum !== null && ageNum >= 30 && ageNum < 70;
 
   return (
@@ -210,8 +211,15 @@ export function Calculator({ initial }: { initial?: Shared }) {
                   <li key={s}>{s}</li>
                 ))}
               </ul>
-              <div className="mt-6">
-                <ShareBar url={shareUrl} text={`Overseas family tax deduction check: ${VERDICT_LABEL[r.verdict]}${r.totalDeduction ? `, ${yen(r.totalDeduction)}` : ""}`} />
+              <div className="mt-6 border-t border-line pt-4" data-testid="share-result">
+                <p className="text-xs text-muted">
+                  {isGithubPages
+                    ? "Share the checker. A link to this exact result returns when hosting is back."
+                    : "Share this result. The link carries only these choices; nothing is stored."}
+                </p>
+                <div className="mt-3">
+                  <ShareBar url={shareUrl} text={`Overseas family tax deduction check: ${VERDICT_LABEL[r.verdict]}${r.totalDeduction ? `, ${yen(r.totalDeduction)}` : ""}`} />
+                </div>
               </div>
             </>
           ) : (
