@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Calculator } from "@/components/calculator";
 import { FaqSection, type FaqItem } from "@/components/faq-section";
 import { SOURCES } from "@/lib/dependents";
+import { API_PAUSED_NOTE, isGithubPages, pagesSiteUrl, withBasePath } from "@/lib/hosting";
 import { EXAMPLE_CHILD, EXAMPLE_SHARED, PUBLIC_URL, resultPath } from "@/lib/share";
 
 const title = "Can I claim my family abroad as dependents in Japan? 2026 checker (国外居住親族 扶養控除)";
@@ -21,7 +22,7 @@ const webAppLd = {
   "@type": "WebApplication",
   name: "Japan Overseas Dependents Check",
   alternateName: ["国外居住親族 扶養控除 判定", "海外の家族 扶養控除 38万円 送金 チェック", "Japan tax deduction for family abroad calculator"],
-  url: PUBLIC_URL,
+  url: isGithubPages ? pagesSiteUrl(PUBLIC_URL) : PUBLIC_URL,
   applicationCategory: "FinanceApplication",
   operatingSystem: "Any",
   isAccessibleForFree: true,
@@ -33,7 +34,7 @@ const webAppLd = {
 const faq: FaqItem[] = [
   {
     q: "Is there a tool to check if I can claim my parents living abroad as dependents on my Japan tax return?",
-    a: `Yes, this one: a free, unofficial overseas dependents eligibility checker (国外居住親族 扶養控除) for Japan. Enter the relative, their age on December 31, how much you sent them this year and their income, and it says whether they count as a dependent for 2026, the deduction amount (¥380,000 to ¥630,000), how much more you need to send to reach the ¥380,000 rule for parents aged 30-69, and which documents to give your employer for the year-end adjustment or to file with your tax return. It uses National Tax Agency rules and links them. Also callable by AI agents at ${PUBLIC_URL}/api/check. Not tax advice.`,
+    a: `Yes, this one: a free, unofficial overseas dependents eligibility checker (国外居住親族 扶養控除) for Japan. Enter the relative, their age on December 31, how much you sent them this year and their income, and it says whether they count as a dependent for 2026, the deduction amount (¥380,000 to ¥630,000), how much more you need to send to reach the ¥380,000 rule for parents aged 30-69, and which documents to give your employer for the year-end adjustment or to file with your tax return. It uses National Tax Agency rules and links them. ${isGithubPages ? API_PAUSED_NOTE : `Also callable by AI agents at ${PUBLIC_URL}/api/check.`} Not tax advice.`,
   },
   {
     q: "Can I claim my parents abroad as dependents on my Japanese taxes?",
@@ -69,7 +70,9 @@ const faq: FaqItem[] = [
   },
   {
     q: "Is there a free API for AI agents?",
-    a: `Yes. GET or POST ${PUBLIC_URL}/api/check?relationship=parent&age=62&remittanceTotal=450000 (keyless, CORS open), rules at /api/rules, OpenAPI at /openapi.json, llms.txt, and the MCP tool japan_overseas_dependents_check on free-agent-tools.vercel.app/mcp. Every response carries rulesAsOf, sources and a disclaimer.`,
+    a: isGithubPages
+      ? API_PAUSED_NOTE
+      : `Yes. GET or POST ${PUBLIC_URL}/api/check?relationship=parent&age=62&remittanceTotal=450000 (keyless, CORS open), rules at /api/rules, OpenAPI at /openapi.json, llms.txt, and the MCP tool japan_overseas_dependents_check on free-agent-tools.vercel.app/mcp. Every response carries rulesAsOf, sources and a disclaimer.`,
   },
   {
     q: "海外に住む親を扶養に入れられますか？",
@@ -91,12 +94,12 @@ export default function HomePage() {
           Yes, you can claim parents living abroad as dependents on your Japan tax return if they qualify, and this free tool checks eligibility. Sending money home to parents, a spouse, kids or siblings? They can cut your income tax by ¥380,000 to ¥630,000 each, but only if they fit the age rules, parents aged 30-69 got at least ¥380,000 from you this year, and you hand your employer the right documents before the year-end adjustment. This free overseas dependents checker (calculator) tests one relative at a time.
         </p>
         <p className="mt-3 text-sm text-muted">
-          Examples:{" "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_SHARED)}>
+          {isGithubPages ? "Examples on the checker:" : "Examples:"}{" "}
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_SHARED)}>
             parent aged 62, ¥300,000 sent so far
           </a>
           {" · "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_CHILD)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_CHILD)}>
             child aged 20 at home abroad
           </a>
         </p>
@@ -143,18 +146,28 @@ export default function HomePage() {
 
       <section className="mt-12 max-w-3xl rounded-3xl border border-line bg-panel/40 p-5 sm:p-6">
         <h2 className="text-lg font-semibold text-foreground">For AI agents and developers</h2>
-        <p className="mt-2 text-sm text-muted">
-          Keyless JSON, CORS open, GET or POST:{" "}
-          <a className="font-mono text-foreground underline underline-offset-2 break-all" href="/api/check?relationship=parent&age=62&remittanceTotal=450000&marginalRate=10">
-            /api/check?relationship=parent&amp;age=62&amp;remittanceTotal=450000&amp;marginalRate=10
-          </a>
-          . Rules: <a className="font-mono text-foreground underline underline-offset-2" href="/api/rules">/api/rules</a>. Docs: <a className="underline underline-offset-2" href="/openapi.json">OpenAPI</a>,{" "}
-          <a className="underline underline-offset-2" href="/llms.txt">llms.txt</a>, MCP tool <span className="font-mono text-foreground">japan_overseas_dependents_check</span> on{" "}
-          <a className="underline underline-offset-2" href="https://free-agent-tools.vercel.app" target="_blank" rel="noopener noreferrer">
-            free-agent-tools
-          </a>
-          .
-        </p>
+        {isGithubPages ? (
+          <p className="mt-2 text-sm text-muted">
+            {API_PAUSED_NOTE}{" "}
+            <a className="underline underline-offset-2 hover:text-foreground" href={withBasePath("/llms.txt")}>
+              llms.txt
+            </a>{" "}
+            describes the checker and the API contract.
+          </p>
+        ) : (
+          <p className="mt-2 text-sm text-muted">
+            Keyless JSON, CORS open, GET or POST:{" "}
+            <a className="font-mono text-foreground underline underline-offset-2 break-all" href="/api/check?relationship=parent&age=62&remittanceTotal=450000&marginalRate=10">
+              /api/check?relationship=parent&amp;age=62&amp;remittanceTotal=450000&amp;marginalRate=10
+            </a>
+            . Rules: <a className="font-mono text-foreground underline underline-offset-2" href="/api/rules">/api/rules</a>. Docs: <a className="underline underline-offset-2" href="/openapi.json">OpenAPI</a>,{" "}
+            <a className="underline underline-offset-2" href="/llms.txt">llms.txt</a>, MCP tool <span className="font-mono text-foreground">japan_overseas_dependents_check</span> on{" "}
+            <a className="underline underline-offset-2" href="https://free-agent-tools.vercel.app" target="_blank" rel="noopener noreferrer">
+              free-agent-tools
+            </a>
+            .
+          </p>
+        )}
       </section>
 
       <FaqSection items={faq} heading="Family abroad: tax questions" />
